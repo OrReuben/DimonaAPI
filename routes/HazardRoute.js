@@ -4,6 +4,7 @@ const Hazard = require("../models/hazardModel");
 
 router.get("/hazards", (req, res, next) => {
   Hazard.find({})
+    .sort({ _id: -1 })
     .then((data) => res.json(data))
     .catch(next);
 });
@@ -14,6 +15,7 @@ router.get("/weekly/hazards", (req, res, next) => {
       $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000),
     },
   })
+    .sort({ _id: -1 })
     .then((data) => res.json(data))
     .catch(next);
 });
@@ -52,6 +54,21 @@ router.delete("/hazards/:id", (req, res, next) => {
   Hazard.findOneAndDelete({ _id: req.params.id })
     .then((data) => res.json(data))
     .catch(next);
+});
+
+router.put("/hazards/:id", async (req, res) => {
+  try {
+    const updatedHazard = await Hazard.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: req.body,
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedHazard);
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 module.exports = router;

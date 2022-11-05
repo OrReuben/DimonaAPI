@@ -3,7 +3,7 @@ const router = express.Router();
 const Update = require("../models/updatesModel");
 
 router.get("/updates", (req, res, next) => {
-  Update.find({})
+  Update.find().sort({_id:-1})
     .then((data) => res.json(data))
     .catch(next);
 });
@@ -12,9 +12,8 @@ router.post("/updates", async (req, res, next) => {
   const newUpdate = new Update(req.body);
   
   try {
-    await newUpdate.save();
-    const sortedUpdate = await Update.find().sort({$natural:-1});
-    res.status(200).json(sortedUpdate);
+    const savedUpdate = await newUpdate.save();
+    res.status(200).json(savedUpdate);
   } catch (err) {
     res.status(500).json(err);
   }
