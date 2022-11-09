@@ -10,6 +10,9 @@ router.get("/auth", (req, res, next) => {
 });
 
 router.post("/register", async (req, res) => {
+  if(User.findOne({email:req.body.email})){
+    res.status(401).json("The email is already in use!")
+  }
   const newUser = new User({
     name: req.body.name,
     img: req.body.img,
