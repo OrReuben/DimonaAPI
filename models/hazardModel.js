@@ -27,7 +27,7 @@ const HazardsSchema = new Schema(
       type: Number,
       required: true,
       min: 10,
-      max: 10,
+      max: 11,
     },
     img: {
       type: Array,
