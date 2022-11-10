@@ -26,8 +26,6 @@ const HazardsSchema = new Schema(
     phone: {
       type: Number,
       required: true,
-      min: 10,
-      max: 11,
     },
     img: {
       type: Array,
