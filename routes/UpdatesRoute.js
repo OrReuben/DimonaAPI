@@ -24,4 +24,5 @@ router.delete("/update/:id", (req, res, next) => {
     .then((data) => res.json(data))
     .catch(next);
 });
+
 module.exports = router;

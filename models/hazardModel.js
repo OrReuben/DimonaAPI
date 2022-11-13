@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 // Create schema for todo
 const HazardsSchema = new Schema(
   {
+    profession: {
+      type: String,
+      required: true,
+    },
     type: {
       type: String,
       required: true,
@@ -26,6 +30,13 @@ const HazardsSchema = new Schema(
     phone: {
       type: Number,
       required: true,
+    },
+    _uid: {
+      type: String,
+      required: true,
+    },
+    _wid: {
+      type: String,
     },
     img: {
       type: Array,

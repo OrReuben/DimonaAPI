@@ -9,6 +9,20 @@ router.get("/hazards", (req, res, next) => {
     .catch(next);
 });
 
+router.get("/hazards/:id", (req, res, next) => {
+  Hazard.find({ _uid: req.params.id })
+    .sort({ _id: -1 })
+    .then((data) => res.json(data))
+    .catch(next);
+});
+
+router.get("/hazards/find/:profession", (req, res, next) => {
+  Hazard.find({ profession: req.params.profession })
+    .sort({ _id: -1 })
+    .then((data) => res.json(data))
+    .catch(next);
+});
+
 router.get("/weekly/hazards", (req, res, next) => {
   Hazard.find({
     timestamp: {
@@ -34,6 +48,12 @@ router.get("/hazardsNotDone", (req, res, next) => {
 
 router.get("/hazardsPending", (req, res, next) => {
   Hazard.find({ status: "בביצוע" })
+    .then((data) => res.json(data))
+    .catch(next);
+});
+
+router.get("/onGoingHazards/:wid", (req, res, next) => {
+  Hazard.find({ status: "בביצוע", _wid: req.params.wid })
     .then((data) => res.json(data))
     .catch(next);
 });
