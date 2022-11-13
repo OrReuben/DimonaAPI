@@ -10,8 +10,9 @@ router.get("/auth", (req, res, next) => {
 });
 
 router.post("/register", async (req, res) => {
-  if(User.findOne({email:req.body.email})){
-    res.status(401).json("The email is already in use!")
+  const userRegistered = await User.findOne({ email: req.body.email });
+  if (userRegistered) {
+    res.status(401).json("Email is already in use!");
   }
   const newUser = new User({
     name: req.body.name,
@@ -21,6 +22,7 @@ router.post("/register", async (req, res) => {
       req.body.password,
       process.env.PASS_SEC
     ).toString(),
+    profession: req.body.profession,
   });
 
   try {
@@ -36,9 +38,9 @@ router.post("/login", async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
     if (!user) {
       res.status(401).json({
-        failed:true,
-        msg:"Wrong credentials!"
-      });;
+        failed: true,
+        msg: "Wrong credentials!",
+      });
     } else {
       const hashedPassword = CryptoJS.AES.decrypt(
         user.password,
@@ -48,15 +50,15 @@ router.post("/login", async (req, res) => {
 
       if (OriginalPassword !== req.body.password) {
         res.status(401).json({
-          failed:true,
-          msg:"Wrong credentials!"
+          failed: true,
+          msg: "Wrong credentials!",
         });
       } else {
-        const { password, ...others } = user._doc;  
+        const { password, ...others } = user._doc;
         res.status(200).json({
-          failed:false,
-          user:{others}
-        });;
+          failed: false,
+          user: { others },
+        });
       }
     }
   } catch (err) {
