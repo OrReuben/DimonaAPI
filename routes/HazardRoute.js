@@ -16,12 +16,6 @@ router.get("/hazards/:id", (req, res, next) => {
     .catch(next);
 });
 
-router.get("/hazards/find/:profession", (req, res, next) => {
-  Hazard.find({ profession: req.params.profession })
-    .sort({ _id: -1 })
-    .then((data) => res.json(data))
-    .catch(next);
-});
 
 router.get("/weekly/hazards", (req, res, next) => {
   Hazard.find({
@@ -40,8 +34,14 @@ router.get("/hazardsDone", (req, res, next) => {
     .catch(next);
 });
 
-router.get("/hazardsNotDone", (req, res, next) => {
+router.get("/allHazardsNotDone", (req, res, next) => {
   Hazard.find({ status: "לא בוצע" })
+    .then((data) => res.json(data))
+    .catch(next);
+});
+
+router.get("/hazardsNotDone/:profession", (req, res, next) => {
+  Hazard.find({ status: "לא בוצע",  profession: req.params.profession })
     .then((data) => res.json(data))
     .catch(next);
 });
