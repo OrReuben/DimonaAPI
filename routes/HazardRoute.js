@@ -66,6 +66,41 @@ router.get(
   }
 );
 
+router.get("/hazardPercentage", async (req, res) => {
+  try {
+    const doneHazards = await Hazard.find({
+      status: "בוצע",
+      timestamp: {
+        $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000),
+      },
+    });
+    const notDoneHazards = await Hazard.find({
+      status: "לא בוצע",
+      timestamp: {
+        $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000),
+      },
+    });
+    const onGoingHazards = await Hazard.find({
+      status: "בביצוע",
+      timestamp: {
+        $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000),
+      },
+    });
+    const weeklyHazards = await Hazard.find({
+      timestamp: {
+        $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000),
+      },
+    });
+    res.status(200).json({
+      doneHazards: doneHazards.length,
+      notDoneHazards: notDoneHazards.length,
+      onGoingHazards: onGoingHazards.length,
+      weeklyHazards: weeklyHazards.length,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 // Remove this whenever theres an active post route at the other website
 router.post("/hazards", verifyToken, (req, res, next) => {
   if (req.body.type && req.body.location && req.body.date) {
