@@ -101,9 +101,10 @@ router.get("/hazardPercentage", async (req, res) => {
     res.status(500).json(err);
   }
 });
+
 // Remove this whenever theres an active post route at the other website
-router.post("/hazards", verifyToken, (req, res, next) => {
-  if (req.body.type && req.body.location && req.body.date) {
+router.post("/hazards", (req, res, next) => {
+  if (req.body.location) {
     Hazard.create(req.body)
       .then((data) => res.json(data))
       .catch(next);
