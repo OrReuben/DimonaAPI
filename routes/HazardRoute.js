@@ -23,12 +23,12 @@ router.get("/hazards/:id", verifyTokenAndAuthorization, (req, res, next) => {
 
 router.get("/weekly/hazards", verifyToken, (req, res, next) => {
   Hazard.find({
-    timestamp: {
+    createdAt: {
       $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000),
     },
   })
     .sort({ _id: -1 })
-    .then((data) => res.json(data))
+    .then((data) => res.send(data))
     .catch(next);
 });
 
@@ -70,24 +70,24 @@ router.get("/hazardPercentage", async (req, res) => {
   try {
     const doneHazards = await Hazard.find({
       status: "בוצע",
-      timestamp: {
+      createdAt: {
         $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000),
       },
     });
     const notDoneHazards = await Hazard.find({
       status: "לא בוצע",
-      timestamp: {
+      createdAt: {
         $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000),
       },
     });
     const onGoingHazards = await Hazard.find({
       status: "בביצוע",
-      timestamp: {
+      createdAt: {
         $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000),
       },
     });
     const weeklyHazards = await Hazard.find({
-      timestamp: {
+      createdAt: {
         $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000),
       },
     });
