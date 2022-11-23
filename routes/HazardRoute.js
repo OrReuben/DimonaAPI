@@ -66,6 +66,71 @@ router.get(
   }
 );
 
+router.get("/hazardstats", verifyToken, async (req, res, next) => {
+  try {
+    const sevenDaysAgo = await Hazard.find({
+      createdAt: {
+        $lte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000),
+        $gte: new Date(new Date() - 8 * 60 * 60 * 24 * 1000),
+      },
+    });
+    const sixDaysAgo = await Hazard.find({
+      createdAt: {
+        $lte: new Date(new Date() - 6 * 60 * 60 * 24 * 1000),
+        $gte: new Date(new Date() - 7 * 60 * 60 * 24 * 1000),
+      },
+    });
+    const fiveDaysAgo = await Hazard.find({
+      createdAt: {
+        $lte: new Date(new Date() - 5 * 60 * 60 * 24 * 1000),
+        $gte: new Date(new Date() - 6 * 60 * 60 * 24 * 1000),
+      },
+    });
+    const fourDaysAgo = await Hazard.find({
+      createdAt: {
+        $lte: new Date(new Date() - 4 * 60 * 60 * 24 * 1000),
+        $gte: new Date(new Date() - 5 * 60 * 60 * 24 * 1000),
+      },
+    });
+    const threeDaysAgo = await Hazard.find({
+      createdAt: {
+        $lte: new Date(new Date() - 3 * 60 * 60 * 24 * 1000),
+        $gte: new Date(new Date() - 4 * 60 * 60 * 24 * 1000),
+      },
+    });
+    const twoDaysAgo = await Hazard.find({
+      createdAt: {
+        $lte: new Date(new Date() - 2 * 60 * 60 * 24 * 1000),
+        $gte: new Date(new Date() - 3 * 60 * 60 * 24 * 1000),
+      },
+    });
+    const oneDaysAgo = await Hazard.find({
+      createdAt: {
+        $lte: new Date(new Date() - 1 * 60 * 60 * 24 * 1000),
+        $gte: new Date(new Date() - 2 * 60 * 60 * 24 * 1000),
+      },
+    });
+    const today = await Hazard.find({
+      createdAt: {
+        $lte: new Date(),
+        $gte: new Date(new Date() - 1 * 60 * 60 * 24 * 1000),
+      },
+    });
+    res.status(200).json({
+      sevenDaysAgo: sevenDaysAgo.length,
+      sixDaysAgo: sixDaysAgo.length,
+      fiveDaysAgo: fiveDaysAgo.length,
+      fourDaysAgo: fourDaysAgo.length,
+      threeDaysAgo: threeDaysAgo.length,
+      twoDaysAgo: twoDaysAgo.length,
+      oneDaysAgo: oneDaysAgo.length,
+      today: today.length,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 router.get("/hazardPercentage", async (req, res) => {
   try {
     const doneHazards = await Hazard.find({
